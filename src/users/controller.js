@@ -67,41 +67,41 @@ const logoutUser = (req, res) => {
 }
 
 const removeUser = (req, res) => {
-    const id = parseInt(req.params.id);
-
-    pool.query(queries.getUsersById, [id], (error, results) => {
-        if (!results.rows.length) {
-            res.send("User doesn't exists.");
-        } else {
-            //remove student from db
-            pool.query(queries.removeUser, [id], (error, results) => {
-                if(error) throw error
-                res.status(200).send("User has been removed!");
-                console.log("User Deleted.");
-            });
-        }
-    });
+    if(req.session.loggedin) {
+        //remove student from db
+        pool.query(queries.removeUser, [req.session.user_id], (error, results) => {
+            if(error) throw error
+            logoutUser(req, res);
+            console.log("User Deleted.");
+        });
+    } else {
+        res.send("You have to be logged in!");
+    }
 }
 
 const updateUser = (req, res) => {
-    const id = parseInt(req.params.id);
-    const {name, lastname} = req.body;
-    console.log("reqid: " + id + "; id: " + req.session.user_id);
-    if(req.session.user_id === id){
-        //update student in db
-        const data = [
-            id,
-            name ? name : req.session.name,
-            lastname ? lastname : req.session.lastname,
-        ];
+    if(req.session.loggedin) {
+        const id = parseInt(req.params.id);
+        const {name, lastname} = req.body;
 
-        pool.query(queries.updateUser, [...data], (error, results) => {
-            if (error) throw error;
-            res.status(200).send("User has been updated!");
-            console.log("User Updated.");
-        });
+        if (req.session.user_id === id) {
+            //update student in db
+            const data = [
+                id,
+                name ? name : req.session.name,
+                lastname ? lastname : req.session.lastname,
+            ];
+
+            pool.query(queries.updateUser, [...data], (error, results) => {
+                if (error) throw error;
+                res.status(200).send("User has been updated!");
+                console.log("User Updated.");
+            });
+        } else {
+            res.send("Wrong id!");
+        }
     } else {
-        res.send("You have to be logged in OR wrong id!");
+        res.send("You have to be logged in!");
     }
 }
 

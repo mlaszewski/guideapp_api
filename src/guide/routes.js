@@ -4,6 +4,7 @@ const controller = require('./controller');
 const router = Router();
 
 // API Guides
-router.post("/", controller.getUsers);
+router.post("/", controller.createGuideProfile);
+router.post("/:id", controller.getGuideById);
 
 module.exports = router;
