@@ -4,10 +4,14 @@ const controller = require('./controller');
 const router = Router();
 
 // API USERS
-router.get("/", controller.getUsers);
-router.get("/:id", controller.getUsersById);
-router.post("/", controller.addUser);
-router.put("/:id", controller.updateUser);
-router.delete("/:id", controller.removeUser);
+router.get("/", controller.getUsers); // returns list of registered users
+router.get("/:id", controller.getUsersById); // returns user with $id
+router.put("/:id", controller.updateUser); // updates user information (name, lastname)
+router.delete("/:id", controller.removeUser); // deletes user with $id account
+
+// API AUTH
+router.post("/register", controller.addUser); // registers user
+router.post("/login", controller.authenticateUser); // logs in user
+router.post("/logout", controller.logoutUser); // logs out user
 
 module.exports = router;
