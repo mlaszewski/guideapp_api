@@ -5,6 +5,8 @@ const router = Router();
 
 // API Guides
 router.post("/", controller.createGuideProfile);
-router.post("/:id", controller.getGuideById);
+router.get("/:id", controller.getGuideById);
+router.post("/:id", controller.toggleGuideToFav);
+
 
 module.exports = router;

@@ -9,7 +9,7 @@ const getGuideById = (req, res) => {
         if(results.rows.length){
             res.status(200).json(results.rows);
         } else {
-            res.status(404).send("Guide not found.")
+            res.status(404).send("Guide not found.");
         }
     })
 }
@@ -25,7 +25,7 @@ const createGuideProfile = (req, res) => {
             licenses: licenses,
             specs: specs,
             languages: languages
-        }
+        };
 
         let missingInfo = [];
         for (const [key, value] of Object.entries(guideInfo)) {
@@ -50,8 +50,36 @@ const createGuideProfile = (req, res) => {
     }
 }
 
+const toggleGuideToFav = (req, res) => {
+    const guide_id = req.params.id;
+    if(req.session.loggedin) {
+        pool.query(queries.getGuideById, [guide_id], (error, results) => {
+            if (error) throw error;
+            if (!results.rows.length) {
+                res.send("Guide doesn't exist.");
+            } else {
+                pool.query(queries.checkIfGuideInFav, [req.session.user_id, guide_id], (error, results) => {
+                    if (!results.rows.length) {
+                        pool.query(queries.addGuideToFav, [req.session.user_id, guide_id], (error, results) => {
+                            if (error) throw error;
+                            res.status(201).send("Guide added to favourites!");
+                        });
+                    } else {
+                        pool.query(queries.removeGuideFromFav, [req.session.user_id, guide_id], (error, results) => {
+                            if (error) throw error;
+                            res.status(201).send("Guide removed from favourites!");
+                        });
+                    }
+                })
+            }
+        });
+    } else {
+        res.send("You have to be logged in!");
+    }
+}
+
 module.exports = {
     getGuideById,
     createGuideProfile,
-
+    toggleGuideToFav,
 };

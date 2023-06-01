@@ -1,6 +1,5 @@
 const pool= require('../../db');
 const queries = require('./queries');
-const bcrypt = require("bcryptjs");
 
 const getUsers = (req, res) => {
     pool.query(queries.getUsers, (error, results) => {
@@ -50,6 +49,7 @@ const authenticateUser = (req, res) => {
                 req.session.name = results.rows[0].name;
                 req.session.lastname = results.rows[0].lastname;
                 req.session.user_id = results.rows[0].id;
+                req.session.isGuide = results.rows[0].is_guide;
                 res.status(200).send(`Hello, ${results.rows[0].name}!`);
             }
         });
