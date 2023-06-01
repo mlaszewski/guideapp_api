@@ -4,6 +4,7 @@ const userRoutes = require("./src/users/routes");
 const guideRoutes = require("./src/guide/routes");
 const placeRoutes = require("./src/place/routes");
 const termRoutes = require("./src/term/routes");
+const offerRoutes = require("./src/offer/routes");
 
 const app = express();
 const port = 3000;
@@ -19,5 +20,6 @@ app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/guides', guideRoutes);
 app.use('/api/v1/places', placeRoutes);
 app.use('/api/v1/terms', termRoutes);
+app.use('/api/v1/offers', offerRoutes);
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
