@@ -18,12 +18,11 @@ const getOfferById = (req, res) => {
 }
 
 const addOffer = (req, res) => {
-    const {place_id, description, price} = req.body;
+    const {place_id, title, description, price} = req.body;
 
     if (req.session.loggedin) {
         if (req.session.isGuide) {
-            //add student to db
-            pool.query(queries.addOffer, [place_id, req.session.user_id, description, price], (error, results) => {
+            pool.query(queries.addOffer, [place_id, req.session.user_id, title, description, price], (error, results) => {
                 if (error) throw error
                 res.status(201).send("Offer Created Successfully!");
                 console.log("Offer Created.");

@@ -29,6 +29,7 @@ CREATE TABLE "offer" (
 	"id" serial PRIMARY KEY,
 	"place_id" int NOT NULL,
 	"guide_id" int NOT NULL,
+	"title" varchar NOT NULL,
 	"description" varchar NOT NULL,
 	"price" int NOT NULL,
 	CONSTRAINT "fk_place" FOREIGN KEY ("place_id") REFERENCES "places"("id"),
@@ -71,6 +72,7 @@ CREATE TABLE "term" (
 	"id" serial PRIMARY KEY,
 	"timestamp" TIMESTAMP NOT NULL,
 	"guide_id" int NOT NULL,
+	"is_reserved" boolean NOT NULL DEFAULT 'false',
 	CONSTRAINT "fk_guide" FOREIGN KEY ("guide_id") REFERENCES "users"("id")
 );
 

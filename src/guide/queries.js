@@ -4,7 +4,6 @@ const checkIfGuideInFav = "SELECT * FROM user_fav_guides WHERE user_id = $1 AND 
 const addGuideToFav = "INSERT INTO user_fav_guides(user_id, guide_id) VALUES ($1, $2)";
 const removeGuideFromFav = "DELETE FROM user_fav_guides WHERE user_id = $1 AND guide_id = $2";
 
-
 module.exports = {
     getGuideById,
     updateGuideInfo,
