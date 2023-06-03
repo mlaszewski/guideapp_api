@@ -35,7 +35,7 @@ const createGuideProfile = (req, res) => {
         }
 
         if(missingInfo.length) {
-            res.send(`There is some missing information: ${missingInfo.map(item => ` ${item}`)}`);
+            res.status(400).send(`There is some missing information: ${missingInfo.map(item => ` ${item}`)}`);
         } else {
             pool.query(
                 queries.updateGuideInfo,
@@ -56,25 +56,25 @@ const toggleGuideToFav = (req, res) => {
         pool.query(queries.getGuideById, [guide_id], (error, results) => {
             if (error) throw error;
             if (!results.rows.length) {
-                res.send("Guide doesn't exist.");
+                res.status(404).send("Guide doesn't exist.");
             } else {
                 pool.query(queries.checkIfGuideInFav, [req.session.user_id, guide_id], (error, results) => {
                     if (!results.rows.length) {
                         pool.query(queries.addGuideToFav, [req.session.user_id, guide_id], (error, results) => {
                             if (error) throw error;
-                            res.status(201).send("Guide added to favourites!");
+                            res.status(200).send("Guide added to favorites!");
                         });
                     } else {
                         pool.query(queries.removeGuideFromFav, [req.session.user_id, guide_id], (error, results) => {
                             if (error) throw error;
-                            res.status(201).send("Guide removed from favourites!");
+                            res.status(200).send("Guide removed from favorites!");
                         });
                     }
                 })
             }
         });
     } else {
-        res.send("You have to be logged in!");
+        res.status(401).send("You have to be logged in!");
     }
 }
 

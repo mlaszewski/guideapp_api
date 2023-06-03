@@ -38,7 +38,7 @@ const removePlace = (req, res) => {
     //remove place from db
     pool.query(queries.deletePlace, [id], (error, results) => {
         if (error) throw error
-        res.status(201).send("Place deleted.")
+        res.status(200).send("Place deleted.")
     });
 }
 

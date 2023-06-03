@@ -11,7 +11,11 @@ const getUsersById = (req, res) => {
     const id = parseInt(req.params.id);
     pool.query(queries.getUsersById, [id], (error, results) => {
         if(error) throw error;
-        res.status(200).json(results.rows);
+
+        if(results.rows.length)
+            res.status(200).json(results.rows);
+        else
+            res.status(404).send("No user with id found.")
     })
 }
 
@@ -50,19 +54,19 @@ const authenticateUser = (req, res) => {
                 req.session.lastname = results.rows[0].lastname;
                 req.session.user_id = results.rows[0].id;
                 req.session.isGuide = results.rows[0].is_guide;
-                res.status(200).send(`Hello, ${results.rows[0].name}!`);
+                res.status(200).send(`User ${results.rows[0].name} logged in!`);
             }
         });
     } else {
-        response.send('Please enter Username and Password!');
+        response.status(400).send('Please enter Username and Password!');
     }
 }
 const logoutUser = (req, res) => {
     if(req.session.loggedin) {
         req.session.destroy();
-        res.send("User logged out.");
+        res.status(200).send("User logged out.");
     } else {
-        res.send("No user logged in.");
+        res.status(400).send("No user logged in.");
     }
 }
 
@@ -98,10 +102,10 @@ const updateUser = (req, res) => {
                 console.log("User Updated.");
             });
         } else {
-            res.send("Wrong id!");
+            res.status(401).send("You can’t change this data!");
         }
     } else {
-        res.send("You have to be logged in!");
+        res.status(401).send("You have to be logged in!");
     }
 }
 

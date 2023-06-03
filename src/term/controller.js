@@ -45,10 +45,18 @@ const addTerm = (req, res) => {
 const removeTerm = (req, res) => {
     const id = req.params.id;
 
-    pool.query(queries.deleteTerm, [id], (error, results) => {
-        if (error) throw error
-        res.status(201).send("Term deleted.")
-    });
+    if(req.session.loggedin){
+        if(req.session.isGuide){
+            pool.query(queries.deleteTerm, [id], (error, results) => {
+                if (error) throw error
+                res.status(201).send("Term deleted.")
+            });
+        }else {
+            res.send("You have to be a Guide to set terms.");
+        }
+    } else {
+        res.send("You have to be logged in!");
+    }
 }
 
 module.exports = {

@@ -28,7 +28,7 @@ const addOffer = (req, res) => {
                 console.log("Offer Created.");
             })
         } else {
-            res.send("You have to be a Guide to create offer.");
+            res.send("You have to be a Guide to create an offer.");
         }
     } else {
         res.send("You have to be logged in!");
@@ -44,7 +44,7 @@ const removeOffer = (req, res) => {
                 res.status(201).send("Offer deleted.")
             });
         } else {
-            res.send("You have to be a Guide to create offer.");
+            res.send("You have to be a Guide to remove offer.");
         }
     } else {
         res.send("You have to be logged in!");
