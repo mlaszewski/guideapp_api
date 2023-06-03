@@ -21,7 +21,7 @@ const addUser = (req, res) => {
     //check if email exist
     pool.query(queries.checkEmailExists, [email], (error, results) => {
         if (results.rows.length) {
-            res.send("Email already exists.");
+            res.status(400).send("Email already exists.");
         } else {
             //add student to db
             pool.query(queries.addUser, [name, lastname, email, password], (error, results) => {
@@ -41,7 +41,7 @@ const authenticateUser = (req, res) => {
         pool.query(queries.authenticateUser, [email, password], (error, results) => {
 
             if (results.rows.length === 0) {
-                res.send("Incorrect Email and/or Password!");
+                res.status(400).send("Incorrect Email and/or Password!");
             } else {
                 // Authenticate the user
                 req.session.loggedin = true;
